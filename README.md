@@ -14,8 +14,7 @@ Creado por MagicM (la empresa) y Migue Magic.
 esta hecho en lua!
 
 # Pagina web
-https://www.2dtermengine.dev
-(Aun no se compro el dominio pero se comprara en semanas)
+Aun no se compro el dominio.
 
 # Como apoyar
 Puedes apoyarnos dando tu estrella al repositorio!
