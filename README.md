@@ -8,9 +8,9 @@ suficientemente avanzado (mas o menos cuando sea beta).
 Este Engine para el terminal esta hecho con lua!
 ![2DTerm Engine Logo](https://i.ibb.co/GsG6Qmp/logo.png)
 
-Creado por MagicM (la empresa) y Migue Magic.
+Creado por Magirenko (la empresa) y Migue Magic.
 # Por que usar 2DTerm engine
-2DTerm Engine es simple y ligero para hacer juegos por que
+2DTerm Engine es simple y ligero para hacer juegos o interfaces por que
 esta hecho en lua!
 
 # Pagina web
