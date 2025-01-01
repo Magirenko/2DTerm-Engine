@@ -8,7 +8,7 @@ ooooo                      .       .   ooooo     ooo  o8o
 o888ooooood8 `Y8bod8P'   "888"   "888"    `YbodP'    o888o
                    El modulo LettUI
 
-   Copyright (C) 2024 MagicM, todos los derechos reservados.
+   Copyright (C) 2024 Magirenko, todos los derechos reservados.
 ]]
 
 -- Modulos
@@ -74,6 +74,8 @@ function LettUI:CheckUI(UI, type)
       else
         return false
       end
+    else
+      return false
     end
   else
     return false
@@ -111,18 +113,54 @@ function LettUI:Actualizar()
                 if child.type == "label" then
                   if child.state == "displaying" then
                     local AligmentEcuation
+                    local AnchorEcuation = {}
             if child.aligment then
               if child.aligment == "Left" then
                 AligmentEcuation = child.pos[1] + #child.text
               elseif child.aligment == "Right" then
-                AligmentEcuation = math.floor(child.pos[1] + (#child.text / 3)) + 1
+                AligmentEcuation = math.floor(child.pos[1] + 1)
               elseif child.aligment == "Middle" then
                 AligmentEcuation = math.floor(child.pos[1] + (#child.text / 2))
               end
             else
               AligmentEcuation = child.pos[1] + #child.text
             end
-                    SR.ScreenContent.ui = SimpleFuncs:WriteFrom(SR.ScreenContent.ui, UI.pos[1] + AligmentEcuation, UI.pos[2] + 1 + child.pos[2], ("\b \b"):rep(#child.text) .. child.text)
+                    
+                    if child.anchor then
+                      if #child.anchor == 2 then
+                        for i, a in pairs(child.anchor) do
+                          if i == 1 then
+                            if a == "Left" then
+                              AnchorEcuation[i] = 0
+                            elseif a == "Right" then
+                              AnchorEcuation[i] = UI.size[i] - 1
+                            elseif a == "Middle" then
+                              AnchorEcuation[i] = math.floor(UI.size[i] / 2)
+                            else
+                              error("Error a establecer anclaje de la UI: El valor X es invalido, valores disponibles: Right, Left y Middle")
+                            end
+                          elseif i == 2 then
+                            if a == "Bottom" then
+                              AnchorEcuation[i] = UI.size[i] - 1
+                            elseif a == "Top" then
+                              AnchorEcuation[i] = 0
+                            elseif a == "Middle" then
+                              AnchorEcuation[i] = math.floor(UI.size[i] / 2)
+                            else
+                              error("Error a establecer anclaje de la UI: El valor Y es invalido, valores disponibles: Bottom, Top y Middle")
+                            end
+                         end
+                        end
+                      elseif #child.anchor > 2 then
+                        error("Error a establecer anclaje de la UI: El valor del anclaje tiene mas de 3 dimensiones.")
+                      elseif #child.anchor < 2 then
+                        error("Error a establecer anclaje de la UI: El valor del anclaje tiene menos de 1 dimension.")
+                      end
+                    else
+                      AnchorEcuation = {0, 0}
+                    end
+                    print(AnchorEcuation[2])
+                    SR.ScreenContent.ui = SimpleFuncs:WriteFrom(SR.ScreenContent.ui, UI.pos[1] + AligmentEcuation + AnchorEcuation[1], UI.pos[2] + 1 + AnchorEcuation[2] + child.pos[2], ("\b \b"):rep(#child.text) .. child.text)
                   end
                 end
               end
@@ -148,8 +186,13 @@ function LettUI:Actualizar()
 end
 
 function LettUI:new(UITable)
-  table.insert(LettUI.Registered, UITable)
-  LettUI:Actualizar()
+  if LettUI:CheckUI(UITable, UITable.type) then
+    table.insert(LettUI.Registered, UITable)
+    LettUI:Actualizar()
+    return LettUI.Registered[#LettUI.Registered]
+  else
+    error("Error al crear UI: Los datos son invalidos.")
+  end
 end
 
 function LettUI:SetUIState(UI, state)
